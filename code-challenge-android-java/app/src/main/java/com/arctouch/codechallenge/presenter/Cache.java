@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.data;
+package com.arctouch.codechallenge.presenter;
 
 import com.arctouch.codechallenge.model.Genre;
 
