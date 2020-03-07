@@ -1,7 +1,5 @@
 package com.arctouch.codechallenge.model;
 
-import com.arctouch.codechallenge.model.TmdbApi;
-
 public class MovieImageUrlBuilder {
 
     private static final String BACKDROP_URL = "https://image.tmdb.org/t/p/w780";
