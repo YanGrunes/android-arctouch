@@ -6,6 +6,7 @@ public class Interfaces {
 
     public interface UpcomingMovies {
         void getUpcomingMovies(UpcomingMoviesResponse response);
+        void updateUpcomingMovies();
     }
 
     public interface Genres {

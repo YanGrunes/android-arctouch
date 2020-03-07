@@ -31,6 +31,15 @@ public class HomeActivity extends AppCompatActivity implements Interfaces.View {
     @Override
     public void setupRecycler(HomeAdapter homeAdapter) {
         recyclerView.setAdapter(homeAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && !recyclerView.canScrollVertically(1)) {
+                    presenter.updateUpcomingMovies();
+                }
+            }
+        });
         progressBar.setVisibility(View.GONE);
     }
 }
