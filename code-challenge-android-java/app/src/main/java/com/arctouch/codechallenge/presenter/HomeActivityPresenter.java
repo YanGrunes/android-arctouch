@@ -1,5 +1,6 @@
 package com.arctouch.codechallenge.presenter;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.arctouch.codechallenge.R;
@@ -11,11 +12,12 @@ import com.arctouch.codechallenge.model.TmdbApiHelper;
 import com.arctouch.codechallenge.model.UpcomingMoviesResponse;
 import com.arctouch.codechallenge.view.HomeActivity;
 import com.arctouch.codechallenge.view.HomeAdapter;
+import com.arctouch.codechallenge.view.MovieDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivityPresenter implements Interfaces.UpcomingMovies, Interfaces.Genres {
+public class HomeActivityPresenter implements Interfaces.UpcomingMovies, Interfaces.Genres, Interfaces.OnItemClickListener {
 
     private HomeActivity homeActivity;
     private HomeAdapter homeAdapter;
@@ -23,6 +25,7 @@ public class HomeActivityPresenter implements Interfaces.UpcomingMovies, Interfa
     private int currentPage;
     private int lastPage;
     private boolean isFirstRequest;
+    public static final String  SELECTED_MOVIE = "SELECTED_MOVIE";
 
     public HomeActivityPresenter(HomeActivity homeActivity) {
         currentPage = 1;
@@ -41,7 +44,7 @@ public class HomeActivityPresenter implements Interfaces.UpcomingMovies, Interfa
             if (response.results != null && response.results.size() > 0) {
                 updateGenres(response.results);
                 if (homeAdapter == null) {
-                    homeAdapter = new HomeAdapter(response.results);
+                    homeAdapter = new HomeAdapter(response.results, this);
                     homeActivity.setupRecycler(homeAdapter);
                 } else {
                     homeAdapter.getMovies().addAll(response.results);
@@ -80,5 +83,12 @@ public class HomeActivityPresenter implements Interfaces.UpcomingMovies, Interfa
         isFirstRequest = true;
         Cache.setGenres(response.genres);
         apiHelper.requestUpComingMovie(currentPage);
+    }
+
+    @Override
+    public void onItemClick(Movie selectedMovie) {
+        Intent intent = new Intent(homeActivity, MovieDetailsActivity.class);
+        intent.putExtra(SELECTED_MOVIE,selectedMovie);
+        homeActivity.startActivity(intent);
     }
 }

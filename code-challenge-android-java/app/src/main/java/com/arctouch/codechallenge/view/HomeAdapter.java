@@ -1,6 +1,7 @@
 package com.arctouch.codechallenge.view;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arctouch.codechallenge.R;
+import com.arctouch.codechallenge.model.Interfaces;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.model.MovieImageUrlBuilder;
 import com.bumptech.glide.Glide;
@@ -20,42 +22,7 @@ import java.util.List;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     private List<Movie> movies;
-
-    public HomeAdapter(List<Movie> movies) {
-        this.movies = movies;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
-
-        private final TextView titleTextView;
-        private final TextView genresTextView;
-        private final TextView releaseDateTextView;
-        private final ImageView posterImageView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
-            genresTextView = itemView.findViewById(R.id.genresTextView);
-            releaseDateTextView = itemView.findViewById(R.id.releaseDateTextView);
-            posterImageView = itemView.findViewById(R.id.posterImageView);
-        }
-
-        public void bind(Movie movie) {
-            titleTextView.setText(movie.title);
-            genresTextView.setText(TextUtils.join(", ", movie.genres));
-            releaseDateTextView.setText(movie.releaseDate);
-
-            String posterPath = movie.posterPath;
-            if (TextUtils.isEmpty(posterPath) == false) {
-                Glide.with(itemView)
-                        .load(movieImageUrlBuilder.buildPosterUrl(posterPath))
-                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
-                        .into(posterImageView);
-            }
-        }
-    }
+    private Interfaces.OnItemClickListener listener;
 
     @NonNull
     @Override
@@ -71,7 +38,48 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(movies.get(position));
+        holder.bind(movies.get(position), listener);
+    }
+
+
+    public HomeAdapter(List<Movie> movies,Interfaces.OnItemClickListener listener ) {
+        this.movies = movies;
+        this.listener = listener;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
+
+        private final TextView titleTextView;
+        private final TextView genresTextView;
+        private final TextView releaseDateTextView;
+        private final ImageView posterImageView;
+        private final CardView cardView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            titleTextView = itemView.findViewById(R.id.titleTextView);
+            genresTextView = itemView.findViewById(R.id.genresTextView);
+            releaseDateTextView = itemView.findViewById(R.id.releaseDateTextView);
+            posterImageView = itemView.findViewById(R.id.posterImageView);
+            cardView = itemView.findViewById(R.id.cardview);
+        }
+
+        public void bind(Movie movie,Interfaces.OnItemClickListener listener) {
+            titleTextView.setText(movie.title);
+            genresTextView.setText(TextUtils.join(", ", movie.genres));
+            releaseDateTextView.setText(movie.releaseDate);
+
+            String posterPath = movie.posterPath;
+            if (TextUtils.isEmpty(posterPath) == false) {
+                Glide.with(itemView)
+                        .load(movieImageUrlBuilder.buildPosterUrl(posterPath))
+                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
+                        .into(posterImageView);
+            }
+            cardView.setOnClickListener(view -> listener.onItemClick(movie));
+        }
     }
 
     public List<Movie> getMovies() {

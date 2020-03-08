@@ -2,9 +2,10 @@ package com.arctouch.codechallenge.model;
 
 import com.squareup.moshi.Json;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Serializable {
     public int id;
     public String title;
     public String overview;
@@ -64,5 +65,17 @@ public class Movie {
                 ", backdropPath='" + backdropPath + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
                 '}';
+    }
+
+    public String genresToString(){
+        String formattedGenres = "";
+        for (Genre genre: genres) {
+            if(!genre.equals(genres.get(genres.size() -1))){
+                formattedGenres += genre.toString() + ", ";
+            } else {
+                formattedGenres += genre.toString();
+            }
+        }
+        return formattedGenres;
     }
 }

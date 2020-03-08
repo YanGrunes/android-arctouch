@@ -17,4 +17,8 @@ public class Interfaces {
         void setupRecycler(HomeAdapter homeAdapter);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Movie selectedMovie);
+    }
+
 }

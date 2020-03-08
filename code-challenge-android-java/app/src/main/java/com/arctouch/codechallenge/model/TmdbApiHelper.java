@@ -15,7 +15,7 @@ public class TmdbApiHelper {
 
     public void requestUpComingMovie(int currentPage) {
         TmdbApiSingleton.getInstance().getApi()
-                .upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, new Long(currentPage), TmdbApi.DEFAULT_REGION)
+                .upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, new Long(currentPage),"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> ((HomeActivityPresenter) presenter).getUpcomingMovies(response));
